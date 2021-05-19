@@ -43,14 +43,14 @@ enojarse :: Accion
 enojarse  = darAccion gritar.transaccion(50)
 
 darAccion :: Accion->Persona->Persona
-darAccion nuevaAccion unaPersona = unaPersona{acciones = nuevaAccion ++ acciones unaPersona} 
+darAccion nuevaAccion unaPersona = unaPersona{acciones = acciones unaPersona ++ [nuevaAccion]} 
 
 gritar ::Accion
 gritar unaPersona= unaPersona{nombre = nombre unaPersona ++ "AHHHH" }
 
 subastar :: Persona -> Propiedades -> Persona
 subastar unaPersona nuevaPropiedad
-                                |puedeSubastar unaPersona nuevaPropiedad = transaccion(negate.snd.nuevaPropiedad)unaPersona
+                                |puedeSubastar unaPersona nuevaPropiedad = transaccion(negate(snd nuevaPropiedad))unaPersona
 --que pasa si no puede subastar?
 puedeSubastar :: Persona->Propiedades->Bool
 puedeSubastar unaPersona unaPropiedad = suTactica unaPersona == "Oferente singular" || suTactica unaPersona == "Accionista" && tieneElDinero unaPersona unaPropiedad
@@ -59,7 +59,7 @@ tieneElDinero :: Persona -> Propiedades->Bool
 tieneElDinero unaPersona unaPropiedad = snd unaPropiedad <= dinero unaPersona
 
 suTactica :: Persona->String
-suTactica unaPersona = print tacticas unaPersona
+suTactica unaPersona = print . tacticas unaPersona
 
 
 
