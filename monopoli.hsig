@@ -88,4 +88,4 @@ juegoFinal unjugador otrojugador
             |otherwise = otrojugador
 
 ultimaRonda :: Persona -> Persona
-ultimaRonda unaPersona = fold (.) unaPersona (acciones unaPersona)
+ultimaRonda unaPersona = foldl ($) unaPersona (acciones unaPersona)
