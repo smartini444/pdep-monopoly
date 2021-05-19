@@ -1,5 +1,6 @@
 import Text.Show.Functions
 
+
 data Persona = Persona{
     nombre:: String,
     dinero :: Int, 
@@ -14,7 +15,7 @@ type Accion = Persona -> Persona
 
 carolina :: Persona
 carolina = Persona{
-    nombre= Carolina,
+    nombre= "Carolina",
     dinero = 500,
     tacticas= "Accionista",
     propiedades= [],
@@ -23,7 +24,7 @@ carolina = Persona{
     
 manuel :: Persona
 manuel = Persona{
-    nombre= Manuel,
+    nombre= "Manuel",
     dinero = 500,
     tacticas= "Oferente singular",
     propiedades= [],
@@ -31,40 +32,40 @@ manuel = Persona{
     }
 
 pasarPorElBanco :: Accion
-pasarPorElBanco unaPersona = cambiarTactica "comprador compulsivo".transaccion(40)
+pasarPorElBanco  = cambiarTactica "comprador compulsivo".transaccion(40)
 
-transaccion :: int->Persona->Persona
+transaccion :: Int->Persona->Persona
 transaccion plata unaPersona = unaPersona{dinero = plata + dinero unaPersona}
 cambiarTactica :: String -> Persona -> Persona
 cambiarTactica nuevaTactica unaPersona = unaPersona{tacticas = nuevaTactica}
 
 enojarse :: Accion
-enojarse unaPersona = darAccion "gritar".transaccion(50)
+enojarse  = darAccion gritar.transaccion(50)
 
-darAccion :: String->Persona->Persona
-darAccion nuevaAccion unaPersona = unaPersona{acciones = nuevaAccion + acciones unaPersona} 
+darAccion :: Accion->Persona->Persona
+darAccion nuevaAccion unaPersona = unaPersona{acciones = nuevaAccion ++ acciones unaPersona} 
 
 gritar ::Accion
-gritar unaPersona = unaPersona{nombre =  nombre  + "AHHHH" }
+gritar unaPersona= unaPersona{nombre = nombre unaPersona ++ "AHHHH" }
 
 subastar :: Persona -> Propiedades -> Persona
 subastar unaPersona nuevaPropiedad
-                                |puedeSubastar unaPersona = transaccion(negate.snd.nuevaPropiedad)unaPersona
+                                |puedeSubastar unaPersona nuevaPropiedad = transaccion(negate.snd.nuevaPropiedad)unaPersona
 --que pasa si no puede subastar?
-puedeSubastar :: Persona->Propiedades->String
+puedeSubastar :: Persona->Propiedades->Bool
 puedeSubastar unaPersona unaPropiedad = suTactica unaPersona == "Oferente singular" || suTactica unaPersona == "Accionista" && tieneElDinero unaPersona unaPropiedad
 
 tieneElDinero :: Persona -> Propiedades->Bool
 tieneElDinero unaPersona unaPropiedad = snd unaPropiedad <= dinero unaPersona
 
 suTactica :: Persona->String
-suTactica unaPersona = print.tacticas
+suTactica unaPersona = print tacticas unaPersona
 
 
 
 cobrarAlquileres :: Accion
 cobrarAlquileres unaPersona 
-                        |esPropiedadBarata.map snd propiedades = transaccion(10) unaPersona
+                        |esPropiedadBarata.map.snd propiedades unaPersona = transaccion(10) unaPersona
                         |otherwise = transaccion(20) unaPersona
 
 
@@ -74,12 +75,12 @@ esPropiedadBarata unValor = 150 > unValor
 pagarAAccionista :: Accion
 pagarAAccionista unaPersona 
                         | tacticas unaPersona == "Accionista" = transaccion(200) unaPersona
-                        |otherwise = transaccion (-100)
+                        |otherwise = transaccion (-100) unaPersona
 
 hacerBerrinchePor :: Persona->Propiedades->Persona
 hacerBerrinchePor unaPersona unaPropiedad 
                             | tieneElDinero unaPersona unaPropiedad = subastar unaPersona unaPropiedad
-                            |otherwise = hacerBerrinchePor (gritar.transaccion(10) unaPersona) propiedad
+                            |otherwise = hacerBerrinchePor (gritar.transaccion(10) unaPersona) propiedades unaPersona
 
 
 juegoFinal :: Persona->Persona->Persona
@@ -89,3 +90,4 @@ juegoFinal unjugador otrojugador
 
 ultimaRonda :: Persona -> Persona
 ultimaRonda unaPersona = foldl ($) unaPersona (acciones unaPersona)
+
