@@ -86,3 +86,6 @@ juegoFinal :: Persona->Persona->Persona
 juegoFinal unjugador otrojugador
             |dinero unjugador > dinero otrojugador = unjugador
             |otherwise = otrojugador
+
+ultimaRonda :: Persona -> Persona
+ultimaRonda unaPersona = fold (.) unaPersona (acciones unaPersona)
